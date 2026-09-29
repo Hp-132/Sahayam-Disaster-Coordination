@@ -9,7 +9,7 @@ export default function Landing() {
 
   const goCitizen = () => {
     if (isCitizenAuthenticated()) nav("/citizen/dashboard");
-    else nav("/citizen/register");
+    else nav("/citizen/auth");
   };
 
   const goAdmin = () => {

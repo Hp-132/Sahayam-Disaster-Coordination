@@ -62,13 +62,14 @@ export default function CitizenDashboard() {
 
           <button
             onClick={() => {
+              api.signout();
               switchRole();
-              nav("/");
+              nav("/citizen/auth");
             }}
             className="btn btn-sm btn-secondary"
             style={{ background: "#ffffff", color: "#0f172a", fontSize: "0.8rem" }}
           >
-            Switch Role
+            Logout
           </button>
         </div>
 

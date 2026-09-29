@@ -31,6 +31,7 @@ from app.services.demo_ngos import (
     profile_for, primary_type, ensure_demo_account, ensure_regional_units, REGIONAL_AREA, DEMO_NGO_PASSWORD,
 )
 from app.services.ngo_coordination import is_capable, refresh_team_status
+from app.services.land import random_land_point_in_box, random_land_point_near
 random.seed(42)  # reproducible demo data across reseeds
 # ---------------------------------------------------------------------------
 # ZONE DEFINITIONS -- synthetic demo polygons only, NOT official hazard maps
@@ -220,12 +221,6 @@ def weighted_status() -> RequestStatus:
     names = list(STATUS_WEIGHTS.keys())
     w = list(STATUS_WEIGHTS.values())
     return random.choices(names, weights=w)[0]
-def random_point_in_box(box):
-    lat = random.uniform(box["lat_min"], box["lat_max"])
-    lng = random.uniform(box["lng_min"], box["lng_max"])
-    return lat, lng
-def random_point_near(lat, lng, spread=0.04):
-    return lat + random.uniform(-spread, spread), lng + random.uniform(-spread, spread)
 def build_raw_sms(req_type: RequestType, severity: Severity, headcount: int, lat: float, lng: float) -> str:
     # Mirrors exactly what the Android SMS Gateway forwards to POST /webhook/sms.
     # sms_parser.py only ever accepts messages starting with "DR1|" -- everything
@@ -320,7 +315,7 @@ def seed():
             for _ in range(zone["team_count"]):
                 city_pins = TEAM_CITY_PINS[zi]
                 base_lat, base_lng = random.choice(city_pins)
-                lat, lng = random_point_near(base_lat, base_lng, spread=0.03)
+                lat, lng = random_land_point_near(base_lat, base_lng, spread=0.03)
                 unit_name, org_name = TEAM_UNITS[name_idx % len(TEAM_UNITS)]
                 services, _org_type, _years, _size, capacity = profile_for(org_name)
                 team = Team(
@@ -365,10 +360,10 @@ def seed():
                 if severity == Severity.C:
                     # critical requests cluster around a handful of hotspots
                     hlat, hlng = random.choice(zone["hotspots"])
-                    lat, lng = random_point_near(hlat, hlng, spread=0.04)
+                    lat, lng = random_land_point_near(hlat, hlng, spread=0.04)
                 elif severity == Severity.M:
                     # medium requests spread across the whole zone
-                    lat, lng = random_point_in_box(zone)
+                    lat, lng = random_land_point_in_box(zone)
                 else:
                     # low severity: scattered, slightly wider than the zone box
                     pad = 0.05
@@ -376,7 +371,7 @@ def seed():
                         "lat_min": zone["lat_min"] - pad, "lat_max": zone["lat_max"] + pad,
                         "lng_min": zone["lng_min"] - pad, "lng_max": zone["lng_max"] + pad,
                     }
-                    lat, lng = random_point_in_box(wide_box)
+                    lat, lng = random_land_point_in_box(wide_box)
                 data = make_request(req_type, severity, lat, lng, zone["landmarks"])
                 record = Request(**data)
                 db.add(record)
@@ -384,7 +379,7 @@ def seed():
         for _ in range(OUTSIDE_ZONE_COUNT):
             req_type = weighted_type(OUTSIDE_TYPE_WEIGHTS)
             severity = priority_for_type(req_type)
-            lat, lng = random_point_in_box(OUTSIDE_BOX)
+            lat, lng = random_land_point_in_box(OUTSIDE_BOX)
             data = make_request(req_type, severity, lat, lng, [])
             record = Request(**data)
             db.add(record)

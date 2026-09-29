@@ -150,6 +150,8 @@ export function logoutAdmin() {
 export function switchRole() {
   setActiveRole(null);
   logoutAdmin();
+  clearCitizen();
+  clearNgo();
 }
 
 export function isAdminAuthenticated(): boolean {
