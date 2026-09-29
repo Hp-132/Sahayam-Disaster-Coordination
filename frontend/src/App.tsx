@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Landing from "./pages/Landing";
+import CitizenAuth from "./pages/citizen/Auth";
 import CitizenRegister from "./pages/citizen/Register";
 import CitizenLogin from "./pages/citizen/Login";
 import CitizenDashboard from "./pages/citizen/Dashboard";
@@ -13,11 +15,41 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import NgoLogin from "./pages/ngo/Login";
 import NgoRegister from "./pages/ngo/Register";
 import NgoDashboard from "./pages/ngo/Dashboard";
-import { isCitizenAuthenticated, isAdminAuthenticated, isNgoAuthenticated } from "./lib/session";
+import { isCitizenAuthenticated, isAdminAuthenticated, isNgoAuthenticated, clearCitizen } from "./lib/session";
+import { api } from "./api/client";
 import OfflineIndicator from "./components/OfflineIndicator";
 
 function CitizenGuard({ children }: { children: React.ReactNode }) {
-  if (!isCitizenAuthenticated()) return <Navigate to="/citizen/login" replace />;
+  const [status, setStatus] = useState<"checking" | "ok" | "invalid">(
+    isCitizenAuthenticated() ? "checking" : "invalid"
+  );
+
+  useEffect(() => {
+    if (!isCitizenAuthenticated()) {
+      setStatus("invalid");
+      return;
+    }
+    let cancelled = false;
+    api
+      .me()
+      .then(() => { if (!cancelled) setStatus("ok"); })
+      .catch(() => {
+        if (!cancelled) {
+          clearCitizen();
+          setStatus("invalid");
+        }
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (status === "checking") {
+    return (
+      <div className="app-shell" style={{ alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <p className="text-muted">Checking your session…</p>
+      </div>
+    );
+  }
+  if (status === "invalid") return <Navigate to="/citizen/auth" replace />;
   return <>{children}</>;
 }
 
@@ -39,6 +71,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
 
         {/* Citizen */}
+        <Route path="/citizen/auth" element={<CitizenAuth />} />
         <Route path="/citizen/register" element={<CitizenRegister />} />
         <Route path="/citizen/login" element={<CitizenLogin />} />
         <Route

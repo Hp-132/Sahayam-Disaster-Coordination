@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCitizen, saveCitizen, switchRole } from "../../lib/session";
+import { api } from "../../api/client";
 import logoSvg from "../../assets/logo.svg";
 
 export default function CitizenProfile() {
@@ -44,11 +45,12 @@ export default function CitizenProfile() {
               type="button"
               className="btn btn-sm btn-secondary"
               onClick={() => {
+                api.signout();
                 switchRole();
-                nav("/");
+                nav("/citizen/auth");
               }}
             >
-              Switch Role
+              Logout
             </button>
           </div>
 
