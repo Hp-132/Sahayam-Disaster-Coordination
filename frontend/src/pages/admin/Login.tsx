@@ -5,8 +5,12 @@ import logoSvg from "../../assets/logo.svg";
 
 export default function AdminLogin() {
   const nav = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(
+    (import.meta.env.VITE_ADMIN_EMAIL as string) || "adming4@gmail.com"
+  );
+  const [password, setPassword] = useState(
+    (import.meta.env.VITE_ADMIN_PASSWORD as string) || "sahayamg4"
+  );
   const [error, setError] = useState("");
 
   useEffect(() => {
