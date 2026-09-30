@@ -75,7 +75,7 @@ export default function Landing() {
                 marginBottom: "1.4rem",
               }}
             >
-              🛡️ Official Emergency Response & Disaster Management Portal
+              🛡️ Emergency Response & Disaster Management Portal
             </div>
 
             <h1 style={{ fontSize: "2.5rem", fontWeight: 800, lineHeight: 1.2, marginBottom: "1.1rem", color: "#0f172a", letterSpacing: "-0.02em" }}>
