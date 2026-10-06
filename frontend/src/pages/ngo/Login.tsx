@@ -21,7 +21,17 @@ export default function NgoLogin() {
 
   useEffect(() => {
     if (isNgoAuthenticated()) nav("/ngo");
-    api.ngoDemoAccounts().then(setDemo).catch(() => setDemo(null));
+    api
+      .ngoDemoAccounts()
+      .then((d) => {
+        setDemo(d);
+        // Prefill the first demo account so visitors can sign in without knowing credentials
+        if (d.accounts.length > 0) {
+          setLogin((cur) => cur || d.accounts[0].email);
+          setPassword((cur) => cur || d.password);
+        }
+      })
+      .catch(() => setDemo(null));
   }, [nav]);
 
   const onSubmit = async (e: FormEvent) => {

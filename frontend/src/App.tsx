@@ -18,6 +18,7 @@ import NgoDashboard from "./pages/ngo/Dashboard";
 import { isCitizenAuthenticated, isAdminAuthenticated, isNgoAuthenticated, clearCitizen } from "./lib/session";
 import { api } from "./api/client";
 import OfflineIndicator from "./components/OfflineIndicator";
+import LanguageBar from "./components/LanguageBar";
 
 function CitizenGuard({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<"checking" | "ok" | "invalid">(
@@ -66,6 +67,7 @@ function NgoGuard({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <div className="app-shell">
+      <LanguageBar />
       <OfflineIndicator />
       <Routes>
         <Route path="/" element={<Landing />} />

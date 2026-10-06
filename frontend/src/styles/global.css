@@ -560,3 +560,69 @@ body {
   font-size: 0.78rem;
   justify-content: center !important;
 }
+
+/* ==========================================================================
+   Language selector (utility bar) & Indic script fonts
+   ========================================================================== */
+.lang-bar {
+  background: var(--gov-navy);
+  color: #e2e8f0;
+  font-size: 0.78rem;
+  border-bottom: 1px solid var(--gov-navy-light);
+}
+.lang-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.3rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+.lang-bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+.lang-bar-options { display: flex; align-items: center; }
+.lang-bar-btn {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid rgba(203, 213, 225, 0.35);
+  color: #e2e8f0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.15rem 0.75rem;
+}
+.lang-bar-btn:first-child { border-left: 0; }
+.lang-bar-btn:hover { color: #ffffff; text-decoration: underline; }
+.lang-bar-btn:focus-visible { outline: 2px solid #fbbf24; outline-offset: 1px; }
+.lang-bar-btn.active {
+  background: #ffffff;
+  color: var(--gov-navy);
+  border-radius: 4px;
+  border-left-color: transparent;
+}
+@media (max-width: 480px) {
+  .lang-bar-inner { padding: 0.3rem 0.75rem; }
+  .lang-bar-label span { display: none; }
+  .lang-bar-btn { padding: 0.15rem 0.55rem; }
+}
+
+html[lang="hi"] body,
+html[lang="hi"] button,
+html[lang="hi"] input,
+html[lang="hi"] select,
+html[lang="hi"] textarea {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Nirmala UI', 'Mangal', sans-serif;
+}
+html[lang="gu"] body,
+html[lang="gu"] button,
+html[lang="gu"] input,
+html[lang="gu"] select,
+html[lang="gu"] textarea {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Gujarati', 'Nirmala UI', 'Shruti', sans-serif;
+}
