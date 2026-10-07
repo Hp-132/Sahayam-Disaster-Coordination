@@ -4,6 +4,18 @@
 !.env.example
 *.pem
 *.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+*credentials*.json
+
+# Cloudflare tunnel config / credentials
+.cloudflared/
+cloudflared*.yml
+cloudflared*.yaml
+cert.json
 
 # Python
 venv/
@@ -12,12 +24,23 @@ env/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
 # Node / Vite
 node_modules/
 dist/
 *.tsbuildinfo
 *.local
+
+# Database data / dumps
+pgdata/
+*.sql
+*.dump
+*.sqlite
+*.sqlite3
+*.db
 
 # Editor / OS
 .vscode/
@@ -26,3 +49,4 @@ dist/
 .DS_Store
 Thumbs.db
 *.log
+*.apk

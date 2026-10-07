@@ -16,10 +16,12 @@ API default: http://localhost:8000
 
 ## Demo admin credentials
 
-See `.env.example`:
+This is an intentionally public demo account for evaluators; it is pre-filled on the Admin Login page:
 
-- `VITE_ADMIN_EMAIL`
-- `VITE_ADMIN_PASSWORD`
+- Email: `adming4@gmail.com`
+- Password: `sahayamg4`
+
+They can be overridden with `VITE_ADMIN_EMAIL` / `VITE_ADMIN_PASSWORD` (see `.env.example`). Any `VITE_*` value ends up in the public JS bundle, so never use a real password there.
 
 Citizen and volunteer profiles are stored in the browser (localStorage). Admin session uses sessionStorage.
 
